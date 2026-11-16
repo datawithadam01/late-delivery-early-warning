@@ -1,0 +1,26 @@
+dataset_name: dataco_supply_chain
+encoding: latin-1
+date_format: "%m/%d/%Y %H:%M"
+grain: order_item
+
+columns:
+  order_item_id: "Order Item Id"
+  order_id: "Order Id"
+  order_date: "order date (DateOrders)"
+  ship_date: "shipping date (DateOrders)"
+  ship_mode: "Shipping Mode"
+  scheduled_days: "Days for shipment (scheduled)"
+  actual_days: "Days for shipping (real)"
+  delivery_status: "Delivery Status"
+  late_flag_source: "Late_delivery_risk"
+  sales: "Sales"
+  quantity: "Order Item Quantity"
+  discount_rate: "Order Item Discount Rate"
+  profit: "Order Profit Per Order"
+  customer_segment: "Customer Segment"
+  market: "Market"
+  order_region: "Order Region"
+  order_country: "Order Country"
+  category_name: "Category Name"
+  department_name: "Department Name"
+  payment_type: "Type"
