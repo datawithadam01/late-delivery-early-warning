@@ -29,3 +29,10 @@
 - Empty or mostly empty: Product Description (100% empty), Order Zipcode (86% empty), Customer Zipcode.
 - Not needed for this project: Product Image, ids duplicated by other columns, latitude/longitude, city/state columns.
 - Kept for Step 1 even though they leak the target: actual_days, delivery_status, late_flag_source. Step 2 decides what the model may see.
+
+## 16 Nov 2026: ship_date is a leakage column
+
+- Check: ship_date - order_date equals actual_days on 97.42% of rows. ship_date is effectively order_date + actual_days, so it gives away the outcome.
+- Decision: ship_date is DROP for the model in Step 2. Kept in orders_clean and orders_view for reporting only.
+- Step 2 will build features from an explicit allowlist of columns, not "all columns except the leaking ones".
+- Leakage list so far: actual_days, delivery_status, late_flag_source, ship_date, is_late (target).
