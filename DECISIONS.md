@@ -16,8 +16,16 @@
 - Decision: keep cancelled rows in orders_clean (Step 1 does not delete data). Exclude them from model training in Step 2, because "late" is undefined for an order that was never delivered.
 
 ## 16 Nov 2026: Late flag check
+
 - Delivery status: Late 98,977 | Advance 41,592 | On time 32,196 | Cancelled 7,754.
 - Own rule (actual_days > scheduled_days) agrees with Late_delivery_risk on 97.55% of rows.
 - All 4,423 disagreements are "Shipping canceled" (rule says late, dataset says not late).
 - Decision: keep all rows in orders_clean. In Step 2, exclude all 7,754 cancelled rows from training (172,765 rows remain), because "late" is undefined for an order that was never delivered.
 - Note: the old project's 57.28% late rate included 4,423 cancelled rows counted as late. Excluding cancelled rows, the late rate is 57.29%.
+
+## 16 Nov 2026: Columns dropped
+
+- Privacy: Customer Email, Customer Password, Customer Fname, Customer Lname, Customer Street.
+- Empty or mostly empty: Product Description (100% empty), Order Zipcode (86% empty), Customer Zipcode.
+- Not needed for this project: Product Image, ids duplicated by other columns, latitude/longitude, city/state columns.
+- Kept for Step 1 even though they leak the target: actual_days, delivery_status, late_flag_source. Step 2 decides what the model may see.
