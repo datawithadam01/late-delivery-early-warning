@@ -26,3 +26,15 @@ None
 
 ## late_flag_agreement_pct
 97.55
+
+## delivery_status_counts
+{'Late delivery': 98977, 'Advance shipping': 41592, 'Shipping on time': 32196, 'Shipping canceled': 7754}
+
+## cancelled_orders
+7754
+
+## late_flag_disagreements
+4423
+
+## late_flag_disagreements_that_are_cancelled
+4423

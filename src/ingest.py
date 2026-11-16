@@ -43,6 +43,13 @@ def validate(df):
     is_late = (df["actual_days"] > df["scheduled_days"]).astype(int)
     agree = (df["late_flag_source"] == is_late).mean() * 100
     checks["late_flag_agreement_pct"] = round(float(agree), 2)
+
+    is_cancelled = df["delivery_status"] == "Shipping canceled"
+    disagree = df["late_flag_source"] != is_late
+    checks["delivery_status_counts"] = df["delivery_status"].value_counts().to_dict()
+    checks["cancelled_orders"] = int(is_cancelled.sum())
+    checks["late_flag_disagreements"] = int(disagree.sum())
+    checks["late_flag_disagreements_that_are_cancelled"] = int((disagree & is_cancelled).sum())
     return checks
 
 
