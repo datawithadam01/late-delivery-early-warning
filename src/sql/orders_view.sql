@@ -7,8 +7,12 @@ SELECT
     ship_mode,
     scheduled_days,
     actual_days,
-    CASE WHEN actual_days > scheduled_days THEN 1 ELSE 0 END AS is_late,
-    delivery_status,
+    CASE WHEN delivery_status = 'Shipping canceled' THEN 1 ELSE 0 END AS is_cancelled,
+    CASE
+        WHEN delivery_status = 'Shipping canceled' THEN NULL
+        WHEN actual_days > scheduled_days THEN 1
+        ELSE 0
+    END AS is_late,    delivery_status,
     late_flag_source,
     sales,
     quantity,
