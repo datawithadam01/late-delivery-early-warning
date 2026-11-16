@@ -52,6 +52,10 @@ def validate(df):
     checks["cancelled_orders"] = int(is_cancelled.sum())
     checks["late_flag_disagreements"] = int(disagree.sum())
     checks["late_flag_disagreements_that_are_cancelled"] = int((disagree & is_cancelled).sum())
+    checks["quantity_zero_or_negative"] = int((df["quantity"] <= 0).sum())
+    checks["discount_rate_out_of_range"] = int(((df["discount_rate"] < 0) | (df["discount_rate"] > 1)).sum())
+    checks["negative_actual_days"] = int((df["actual_days"] < 0).sum())
+    checks["negative_scheduled_days"] = int((df["scheduled_days"] < 0).sum())
     return checks
 
 
@@ -81,6 +85,7 @@ def create_view(db_path, sql_path):
     conn = sqlite3.connect(db_path)
     conn.execute("DROP VIEW IF EXISTS orders_view")
     conn.executescript(sql)
+    conn.execute("SELECT * FROM orders_view LIMIT 1").fetchall()
     conn.close()
 
 

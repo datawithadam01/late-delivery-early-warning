@@ -38,3 +38,15 @@ None
 
 ## late_flag_disagreements_that_are_cancelled
 4423
+
+## quantity_zero_or_negative
+0
+
+## discount_rate_out_of_range
+0
+
+## negative_actual_days
+0
+
+## negative_scheduled_days
+0
