@@ -66,6 +66,14 @@ def load_to_sqlite(df, db_path):
     df.to_sql("orders_clean", conn, if_exists="replace", index=False)
     conn.close()
 
+def create_view(db_path, sql_path):
+    with open(sql_path, encoding="utf-8") as f:
+        sql = f.read()
+    conn = sqlite3.connect(db_path)
+    conn.execute("DROP VIEW IF EXISTS orders_view")
+    conn.executescript(sql)
+    conn.close()
+
 
 def main():
     config = load_config("config/columns.yaml")
@@ -74,6 +82,7 @@ def main():
     checks = validate(df)
     write_quality_report(checks, "docs/data_quality_report.md")
     load_to_sqlite(df, "data/orders.db")
+    create_view("data/orders.db", "src/sql/orders_view.sql")
     print(f"Done: {checks['rows']} rows, {checks['columns']} columns loaded to data/orders.db")
 
 
