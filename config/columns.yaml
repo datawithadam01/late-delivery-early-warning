@@ -1,6 +1,9 @@
 dataset_name: dataco_supply_chain
 encoding: latin-1
 raw_path: "data/DataCoSupplyChainDataset.csv"
+db_path: "data/orders.db"
+report_path: "docs/data_quality_report.md"
+view_sql_path: "src/sql/orders_view.sql"
 date_format: "%m/%d/%Y %H:%M"
 grain: order_item
 

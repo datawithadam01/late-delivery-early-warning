@@ -2,6 +2,8 @@ import sqlite3
 
 import pandas as pd
 import yaml
+from pathlib import Path
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def load_config(path):
@@ -11,7 +13,7 @@ def load_config(path):
 
 
 def read_raw(config):
-    df = pd.read_csv(config["raw_path"], encoding=config["encoding"])
+    df = pd.read_csv(ROOT / config["raw_path"], encoding=config["encoding"])
     return df
 
 
@@ -83,14 +85,14 @@ def create_view(db_path, sql_path):
 
 
 def main():
-    config = load_config("config/columns.yaml")
+    config = load_config(ROOT / "config" / "columns.yaml")
     df = read_raw(config)
     df = standardize(df, config)
     checks = validate(df)
-    write_quality_report(checks, "docs/data_quality_report.md")
-    load_to_sqlite(df, "data/orders.db")
-    create_view("data/orders.db", "src/sql/orders_view.sql")
-    print(f"Done: {checks['rows']} rows, {checks['columns']} columns loaded to data/orders.db")
+    write_quality_report(checks, ROOT / config["report_path"])
+    load_to_sqlite(df, ROOT / config["db_path"])
+    create_view(ROOT / config["db_path"], ROOT / config["view_sql_path"])
+    print(f"Done: {checks['rows']} rows, {checks['columns']} columns loaded to {config['db_path']}")
 
 
 if __name__ == "__main__":
