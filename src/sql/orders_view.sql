@@ -17,7 +17,7 @@ SELECT
     sales,
     quantity,
     discount_rate,
-    profit,
+    item_profit,
     customer_segment,
     market,
     order_region,

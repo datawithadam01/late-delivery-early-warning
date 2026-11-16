@@ -20,7 +20,7 @@ columns:
   sales: "Sales"
   quantity: "Order Item Quantity"
   discount_rate: "Order Item Discount Rate"
-  profit: "Order Profit Per Order"
+  item_profit: "Order Profit Per Order"
   customer_segment: "Customer Segment"
   market: "Market"
   order_region: "Order Region"
