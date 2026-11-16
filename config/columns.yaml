@@ -1,5 +1,6 @@
 dataset_name: dataco_supply_chain
 encoding: latin-1
+raw_path: "data/DataCoSupplyChainDataset.csv"
 date_format: "%m/%d/%Y %H:%M"
 grain: order_item
 
