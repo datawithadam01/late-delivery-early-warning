@@ -6,6 +6,7 @@ report_path: "docs/data_quality_report.md"
 view_sql_path: "src/sql/orders_view.sql"
 date_format: "%m/%d/%Y %H:%M"
 grain: order_item
+date_columns: [order_date, ship_date]
 
 columns:
   order_item_id: "Order Item Id"

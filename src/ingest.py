@@ -22,8 +22,8 @@ def standardize(df, config):
     df = df[raw_names]
     reverse = {raw: std for std, raw in config["columns"].items()}
     df = df.rename(columns=reverse)
-    df["order_date"] = pd.to_datetime(df["order_date"], format=config["date_format"])
-    df["ship_date"] = pd.to_datetime(df["ship_date"], format=config["date_format"])
+    for col in config["date_columns"]:
+        df[col] = pd.to_datetime(df[col], format=config["date_format"])
     return df
 
 
