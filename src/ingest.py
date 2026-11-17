@@ -3,6 +3,7 @@ import sqlite3
 import pandas as pd
 import yaml
 from pathlib import Path
+from datetime import datetime
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -59,8 +60,14 @@ def validate(df):
     return checks
 
 
-def write_quality_report(checks, path):
-    lines = ["# Data Quality Report", ""]
+def write_quality_report(checks, path, source):
+    lines = [
+        "# Data Quality Report",
+        "",
+        f"Source file: {source}",
+        f"Generated: {datetime.now():%Y-%m-%d %H:%M}",
+        "",
+    ]
 
     for name, value in checks.items():
         lines.append(f"## {name}")
@@ -94,7 +101,7 @@ def main():
     df = read_raw(config)
     df = standardize(df, config)
     checks = validate(df)
-    write_quality_report(checks, ROOT / config["report_path"])
+    write_quality_report(checks, ROOT / config["report_path"], config["raw_path"])
     load_to_sqlite(df, ROOT / config["db_path"])
     create_view(ROOT / config["db_path"], ROOT / config["view_sql_path"])
     print(f"Done: {checks['rows']} rows, {checks['columns']} columns loaded to {config['db_path']}")

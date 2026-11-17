@@ -1,5 +1,8 @@
 # Data Quality Report
 
+Source file: data/DataCoSupplyChainDataset.csv
+Generated: 2026-11-17 10:52
+
 ## rows
 180519
 
