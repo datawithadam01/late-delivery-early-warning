@@ -19,3 +19,80 @@ FastAPI
 An API is a web address that returns data, and FastAPI builds one from Python functions.
 @app.get("/health") means “when someone visits /health, run the function below”.
 uvicorn runs the server, and /docs is a page FastAPI builds automatically to test endpoints.
+
+
+Leakage:
+Leakage is when a model is trained on information that would not be available at the moment of prediction. This makes test scores look better than real-world performance.
+"Known before the prediction moment = KEEP. Known after = DROP."ship_date and scheduled_days are two major examples.
+It has two parts:
+
+What: information from after the prediction moment (or the answer itself) gets into the features.
+Effect: the score looks great in testing, but the model fails in real use, because that information doesn't exist yet.
+
+Our project version (use this in interviews):
+
+"We predict at the moment the order is placed. actual_days, ship_date and delivery_status only exist after delivery, so they are leakage. scheduled_days and ship_mode are set at checkout, so they are safe."
+
+Time Split
+In real use we train on the past and predict the future.
+A random split mixes future rows into training, so scores look too good.
+We split by order_date. Items of one order share a date, so they stay together.
+
+Likely interview follow-up: "What if the test period looks different from the train period?" Your answer: yes, ours does. From Oct 2017 the data changes (only Europe and Pacific Asia, more departments), so we report results separately for before and after Oct 2017.
+
+the date-split score is lower but honest, because it matches real use. We predict the future from the past.
+
+We train on the past and test on the newest rows, like real use.
+A random split lets the model see the future, so scores look too good.
+We split by order_date
+
+Base rate:
+The base rate is the share of positives, here 57.29% late.
+Predicting "late" for everything gives 57% accuracy without any model.
+So every metric must be shown next to the base rate, to see if the model really adds something.
+"Your model has 65% accuracy. Is that good?" Your answer: not by itself. Compare it with the base rate (57%) and with the ship-mode baseline.
+
+accuracy can look high while the model catches nothing, so we use precision, recall and PR-AUC instead.
+
+Imp terms:
+Precision: of the items we flag as late, how many are late.
+Recall: of all late items, how many we flag.
+PR-AUC: how well the model ranks risky items first
+
+Precision = of the items I flagged, how many were truly late.
+Recall = of all late items, how many I flagged.
+PR-AUC = how good the ranking is overall. Compare it with the base rate, 0.57.
+
+Callibration:
+A score of 0.7 means about 70% of items with that score should truly be late.
+A calibration curve checks if the scores match reality.
+A model can rank well but still give scores that are too high or too low.
+
+Likely interview follow-up: "Why does calibration matter?" Your answer: if ops teams act on "70% risk", the number must mean what it says.
+
+Calibration means the model's scores match real life. If the model says 0.7 for a group of items, about 70% of them should really be late.
+
+Calibration = the predicted probability matches how often the thing really happens.
+Example: of all items scored about 0.7, about 70% should truly be late.
+A calibration curve checks this. A model can rank well and still be badly calibrated, for example too confident.
+
+Easy picture: a weather app says "70% rain" on 100 days. If it rains on about 70 of them, it is calibrated. If it rains on only 30, it is not.
+
+Our check: the calibration curve plots the predicted score against the real late rate. The closer it is to a diagonal line, the better. You'll save this plot as docs/calibration.png in Task 6.
+
+Overfitting:
+
+A model does this too. It learns the quirks of the training rows, not the real pattern. So the train score is high and the test score is low.
+
+Our version:
+
+Compare the score on train rows with the score on test rows.
+A big gap (high on train, much lower on test) is the warning sign.
+This is one reason we never tune on the test set.
+
+
+Overfitting = the model memorises the training data instead of learning the pattern.
+Sign: high train score, much lower test score.
+Fix: keep the test set untouched, and keep the model simple.
+
+Likely interview follow-up: "How do you check for overfitting?" Your answer: compare train and test scores, and keep the test set for the final check only.
