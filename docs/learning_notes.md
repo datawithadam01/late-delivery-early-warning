@@ -96,3 +96,34 @@ Sign: high train score, much lower test score.
 Fix: keep the test set untouched, and keep the model simple.
 
 Likely interview follow-up: "How do you check for overfitting?" Your answer: compare train and test scores, and keep the test set for the final check only.
+
+Precision@k
+
+Precision@k = sort by risk, take the top k, and see what share are really late.
+It matches real use: ops can only check k items a day.
+Compare it with the base rate (57%). A good model should be well above that at the top.
+: precision@k is only meaningful next to the base rate. 90% against 57% means the top of the ranking is much better than random.
+
+ROC-AUC vs PR-AUC
+ROC-AUC: the chance a random late item gets a higher score than a random on-time item (0.5 = random).
+PR-AUC: how well the flagged items are really late (random = the base rate).
+We report PR-AUC, with the base rate next to it.
+"Why not ROC-AUC?" Your answer: PR-AUC focuses on the items we flag, which is what ops cares about, and it stays strict when positives are rare.
+PR-AUC must be compared with the base rate. 0.58 vs 0.57 means the model is almost random.
+
+Threshold
+
+A model gives each item a score from 0 to 1. To say "late" or "not late", you choose a cutoff, called the threshold.
+Threshold = the score cutoff that turns a probability into "late" or "not late".
+Lower threshold: higher recall, lower precision. Higher threshold: the opposite.
+0.5 is only a default. The right one depends on the cost of mistakes.
+
+Class imbalance 
+Our data is not very imbalanced (57% late vs 43% on time). But interviewers often ask "what if late were only 5%?" Your answer has three parts:
+
+Don't use accuracy. Use precision, recall, PR-AUC and precision@k.
+Tell the model the small class matters more. In scikit-learn: class_weight="balanced".
+Choose the threshold based on the business cost, not 0.5.
+Class imbalance = one class is much bigger than the other.
+Ours is mild (57/43), so we don't need special fixes.
+If late were rare: avoid accuracy, use class weights, and choose the threshold carefully.
