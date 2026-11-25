@@ -127,3 +127,27 @@ Choose the threshold based on the business cost, not 0.5.
 Class imbalance = one class is much bigger than the other.
 Ours is mild (57/43), so we don't need special fixes.
 If late were rare: avoid accuracy, use class weights, and choose the threshold carefully.
+
+the split gave 138,182 train and 34,583 test rows, with equal late rates of about 57.3%, so the base rate is the same on both sides.
+
+flagging everything gives accuracy equal to the base rate (57.30%) and recall 100%, but it tells ops nothing, because it can't tell risky items from safe ones.
+
+the First Class rule has very high precision but low recall, because it flags only one ship mode and misses the late items in the others.
+
+precision 1.0 only means "when I flag, I'm right". It says nothing about how many late items I missed. I need recall too.
+
+: a baseline with only 4 scores has many ties, so its top-k list is arbitrary inside each tie. Real models give many different scores, so they have no such problem.
+
+Baseline	PR-AUC	P@100	P@500	Accuracy	Recall	Precision
+Base rate (reference)	0.573					
+Majority class	n/a	n/a	n/a	0.573	1.000	0.573
+First Class rule	n/a	n/a	n/a	0.580	0.267	1.000
+Ship-mode late rate	0.786	1.000	1.000	not yet computed	not yet computed	not yet computed
+
+
+Ship mode	Late rate
+First Class	100.0%
+Second Class	79.8%
+Same Day	46.7%
+Standard Class	39.9%
+
