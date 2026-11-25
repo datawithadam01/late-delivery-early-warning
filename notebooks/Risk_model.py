@@ -27,3 +27,12 @@ for col in ["payment_type", "customer_segment", "department_name"]:
     print(df.groupby(col)["is_late"].agg(["mean", "size"]))
 
 print(df["items_in_order"].describe())
+
+SPLIT_DATE = pd.Timestamp("2017-04-22")
+train = df[df["order_date"] < SPLIT_DATE]
+test = df[df["order_date"] >= SPLIT_DATE]
+
+print(len(train), len(test))
+print(train["is_late"].mean(), test["is_late"].mean())
+print(train["order_date"].min(), train["order_date"].max())
+print(test["order_date"].min(), test["order_date"].max())
